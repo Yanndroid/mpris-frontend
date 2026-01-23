@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>MPRIS Player</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="bg"></div>
+
+    <div class="container">
+      <div class="card">
+        <img id="art" />
+
+        <div class="text">
+          <div id="title" class="title">—</div>
+          <div id="artist" class="artist">—</div>
+          <div id="album" class="album">—</div>
+        </div>
+      </div>
+
+      <div class="progress-container">
+        <span id="pos">0:00</span>
+        <progress id="progress" value="0" max="1"></progress>
+        <span id="len">0:00</span>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
