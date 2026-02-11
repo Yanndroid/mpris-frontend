@@ -2,6 +2,7 @@ let socket;
 let reconnectDelay = 1000;
 
 let position = 0;
+let length = 1;
 let playing = false;
 
 function formatTime(s) {
@@ -11,7 +12,9 @@ function formatTime(s) {
 }
 
 function updateProgress() {
-    document.getElementById("progress").value = position;
+    const progressBar = document.getElementById("progressBar");
+    progressBar.setProgress(position / length);
+    progressBar.setPlaying(playing);
     document.getElementById("pos").textContent = formatTime(position);
 }
 
@@ -33,8 +36,8 @@ function handleMessage(data) {
         document.getElementById("art").src = player.artUrl;
         document.getElementById("bg").style.backgroundImage = `url(${player.artUrl})`;
         document.getElementById("len").textContent = formatTime(player.length);
-        document.getElementById("progress").max = player.length;
 
+        length = player.length;
         playing = player.status === "Playing";
         position = player.position;
         updateProgress();
