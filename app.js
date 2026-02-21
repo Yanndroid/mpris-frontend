@@ -1,3 +1,7 @@
+const HOST = "localhost";
+const WS_PORT = 8765;
+const ART_PORT = 8766;
+
 let socket;
 let reconnectDelay = 1000;
 
@@ -13,7 +17,7 @@ function formatTime(s) {
 
 function updateProgress() {
     const progressBar = document.getElementById("progressBar");
-    progressBar.setProgress(position / length);
+    progressBar.setProgress(length ? position / length : 0);
     progressBar.setPlaying(playing);
     document.getElementById("pos").textContent = formatTime(position);
 }
@@ -28,26 +32,35 @@ async function fakeProgress() {
 function handleMessage(data) {
     console.log("Received data:", data);
 
-    const player = data[Object.keys(data)[0]];
-    if (player) {
-        document.getElementById("title").textContent = player.title;
-        document.getElementById("artist").textContent = player.artist;
-        document.getElementById("album").textContent = player.album;
-        document.getElementById("art").src = player.artUrl;
-        document.getElementById("bg").style.backgroundImage = `url(${player.artUrl})`;
-        document.getElementById("len").textContent = formatTime(player.length);
-
-        length = player.length;
-        playing = player.status === "Playing";
-        position = player.position;
-        updateProgress();
-    } else {
-        playing = false;
+    let player = data[Object.keys(data)[0]];
+    if (!player) {
+        player = {
+            title: "No music playing",
+            artist: "",
+            album: "",
+            artUrl: `http://${HOST}:${ART_PORT}/art/null`,
+            length: 0,
+            position: 0,
+            status: "Stopped"
+        };
     }
+
+    document.getElementById("title").textContent = player.title;
+    document.getElementById("artist").textContent = player.artist;
+    document.getElementById("album").textContent = player.album;
+    document.getElementById("art").src = player.artUrl;
+    document.getElementById("bg").style.backgroundImage = `url(${player.artUrl})`;
+    document.getElementById("len").textContent = formatTime(player.length);
+
+    length = player.length;
+    playing = player.status === "Playing";
+    position = player.position;
+    updateProgress();
+
 }
 
 function connect() {
-    socket = new WebSocket("ws://localhost:8765/");
+    socket = new WebSocket(`ws://${HOST}:${WS_PORT}/`);
 
     socket.onopen = () => {
         console.log("Connected");
