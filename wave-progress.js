@@ -125,7 +125,7 @@ class WaveProgress extends HTMLElement {
     const waveWidth = this._progress ? Math.max(this._cap * 2, this._width * this._progress) : 0;
     const gap = Math.min(this._gap, this._progress * 100, (1 - this._progress) * 100);
 
-    const amplitude = this._playing ? Math.min(this._height / 4, this._progress * 20, (1 - this._progress) * 20) : 0;
+    const amplitude = this._playing ? Math.min(this._height / 4, this._progress * 20) : 0;
     const wavelength = this._height * 2.5;
 
     /* const waveWidth = this._width * this._progress;
